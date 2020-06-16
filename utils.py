@@ -36,7 +36,7 @@ def get_tags_list(url: str, query: str, pages_count: int, timeout: int, retries_
         request_result = requests.get(url=url, params=params)
         while try_num < retries_count and request_result.status_code != 200:
             logger.warning(f'Request for page №{page_num} returned with code {request_result.status_code}')
-            time.sleep(timeout)
+            time.sleep(timeout*try_num)
             try_num += 1
             logger.warning(f'Retry №{try_num} for page №{page_num}')
             request_result = requests.get(url=url, params=params)
@@ -60,7 +60,7 @@ async def fetch(client: RetryClient, query_string: str, timeout: int, retries_co
             url=query_string,
             retry_attempts=retries_count,
             retry_start_timeout=timeout,
-            retry_factor=1,
+            retry_factor=2,
             retry_max_timeout=timeout*retries_count) as response:
         return await response.text()
 
