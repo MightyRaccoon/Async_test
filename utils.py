@@ -61,7 +61,7 @@ async def fetch(client: RetryClient, query_string: str, timeout: int, retries_co
             retry_attempts=retries_count,
             retry_start_timeout=timeout,
             retry_factor=2,
-            retry_max_timeout=timeout*retries_count) as response:
+            retry_max_timeout=timeout*(2**retries_count)) as response:
         return await response.text()
 
 
