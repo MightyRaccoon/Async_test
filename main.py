@@ -1,5 +1,6 @@
 import logging
 import asyncio
+import time
 from collections import Counter
 
 import asyncclick as click
@@ -32,6 +33,10 @@ async def main(query, pages_count, top, timeout, retries_count):
         logger.info('--- Results ---')
         for top_tag in tags_counter.most_common(top):
             logger.info(f'Tag {top_tag[0]} has {top_tag[1]} usages')
+
+    sleep_time = 60 * (1 + (pages_count // 60) + (retries_count*timeout // 60))
+    logger.info(f'Some sleep for {sleep_time}s before async approach')
+    time.sleep(sleep_time)
 
     logger.info('Async approach')
     with Timer(text="\nTotal elapsed time: {:.1f}s"):
