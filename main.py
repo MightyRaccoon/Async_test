@@ -28,13 +28,14 @@ async def main(query, pages_count, top, timeout, retries_count):
 
     logger.info('Sync approach')
     with Timer(text="\nTotal elapsed time: {:.1f}s"):
-        tags_list = get_tags_list(url, query, pages_count, timeout, retries_count)
+        tags_list = get_tags_list(url, query, pages_count, retries_count)
         tags_counter = Counter(tags_list)
         logger.info('--- Results ---')
+        logger.info(f'Total tags count: {len(tags_list)}')
         for top_tag in tags_counter.most_common(top):
             logger.info(f'Tag {top_tag[0]} has {top_tag[1]} usages')
 
-    sleep_time = 60 * (1 + (pages_count // 60) + (retries_count*timeout // 60))
+    sleep_time = timeout * (1 + (pages_count // 60) + (retries_count*timeout // 60))
     logger.info(f'Some sleep for {sleep_time}s before async approach')
     time.sleep(sleep_time)
 
@@ -43,6 +44,7 @@ async def main(query, pages_count, top, timeout, retries_count):
         tags_list = await get_tags_list_async(url, query, pages_count, timeout, retries_count)
         tags_counter = Counter(tags_list)
         logger.info('--- Results ---')
+        logger.info(f'Total tags count: {len(tags_list)}')
         for top_tag in tags_counter.most_common(top):
             logger.info(f'Tag {top_tag[0]} has {top_tag[1]} usages')
 
