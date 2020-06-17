@@ -1,6 +1,6 @@
 Async_test
 
-Testing asynchronous requests.
+Toy example of asynchronous requests with retries.
 Program will count tags on github repos in 2 ways: using requests library and aiohttp.
 
 Program counts tags on github repos.

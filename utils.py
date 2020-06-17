@@ -41,11 +41,11 @@ def get_tags_list(url: str, query: str, pages_count: int, retries_count: int) ->
             soup = BeautifulSoup(request_result.content, 'lxml')
             for tag in soup.find_all('a', attrs={'class': 'topic-tag topic-tag-link f6 px-2 mx-0'}):
                 tags_list.append(tag.text.strip())
-            logger.debug(f'Tags count after Page №{page_num} processing: {len(tags_list)}')
+            logger.debug(f'Tags count after page №{page_num} processing: {len(tags_list)}')
     return tags_list
 
 
-async def fetch(client: RetryClient, query_string: str, timeout: int, retries_count: int) -> Text:
+async def fetch(client: RetryClient, query_string: str, timeout: float, retries_count: int) -> Text:
     """
     Fetch result of query
     :param client: Client with retry mechanism
@@ -64,7 +64,7 @@ async def fetch(client: RetryClient, query_string: str, timeout: int, retries_co
         return await response.text()
 
 
-async def get_tags_list_async(url: str, query: str, pages_count: int, timeout, retries_count) -> List[str]:
+async def get_tags_list_async(url: str, query: str, pages_count: int, timeout: float, retries_count: int) -> List[str]:
     """
     Return tags list from `url` with `query`. Works asynchronous.
     :param url: URL for `query`
@@ -84,5 +84,5 @@ async def get_tags_list_async(url: str, query: str, pages_count: int, timeout, r
             soup = BeautifulSoup(request_result, 'lxml')
             for tag in soup.find_all('a', attrs={'class': 'topic-tag topic-tag-link f6 px-2 mx-0'}):
                 tags_list.append(tag.text.strip())
-            logger.debug(f'Tags count after Page №{page_num} processing: {len(tags_list)}')
+            logger.debug(f'Tags count after page №{page_num} processing: {len(tags_list)}')
     return tags_list

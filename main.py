@@ -20,7 +20,7 @@ logging.basicConfig(
 @click.option('--query', type=str, help='Query on GitHub.com')
 @click.option('--pages-count', type=int, help='Pages count for analysis', default=1)
 @click.option('--top', type=int, default=1)
-@click.option('--timeout', type=int, default=1)
+@click.option('--timeout', type=float, default=1)
 @click.option('--retries-count', type=int, default=1)
 async def main(query, pages_count, top, timeout, retries_count):
 
@@ -35,7 +35,10 @@ async def main(query, pages_count, top, timeout, retries_count):
         for top_tag in tags_counter.most_common(top):
             logger.info(f'Tag {top_tag[0]} has {top_tag[1]} usages')
 
-    sleep_time = timeout * (1 + (pages_count // 60) + (retries_count*timeout // 60))
+    if timeout < 30:
+        sleep_time = 30
+    else:
+        sleep_time = timeout * (1 + (pages_count // 30) + (retries_count*timeout // 30))
     logger.info(f'Some sleep for {sleep_time}s before async approach')
     time.sleep(sleep_time)
 
